@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <title>Web Game Kéo Thả Thẻ</title>
+
+    <!-- PyScript -->
+    <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+    <script defer src="https://pyscript.net/latest/pyscript.js"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #140345;
+        }
+
+        h2 {
+            margin-bottom: 10px;
+        }
+
+        .container {
+            display: flex;
+            gap: 20px;
+        }
+
+        /* ===== THẺ BÀI ===== */
+        .card-bar {
+            display: flex;
+            gap: 10px; 
+            margin-bottom: 20px; 
+        }
+
+        .card {
+            width: 60px;
+            height: 90px;
+            border: 2px solid #ffffff;
+            cursor: grab;
+            background: rgb(7, 1, 40);
+        }
+
+        .card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* ===== CASE CHỌN ===== */
+        .case-panel {
+            width: 160px;
+        }
+
+        .case-btn {
+            width: 100%;
+            margin-bottom: 8px;
+            padding: 8px;
+            cursor: pointer;
+        }
+
+        /* ===== GRID ===== */
+        .grid-area {
+            flex: 1;
+        }
+
+        .grid {
+            display: grid;
+            gap: 6px;
+            background: #39365d;
+            padding: 10px;
+            border-radius: 6px;
+        }
+
+        .cell {
+            width: 60px;
+            height: 90px;
+            background: white;
+            border: 2px dashed #999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cell img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* ===== BUTTON ===== */
+        .reset-btn {
+            margin-top: 15px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+<h2 style="color: white;">🎮 Game Kéo – Thả Thẻ Hình</h2>
+
+
+<!-- ===== HÀNG THẺ ===== -->
+<div class="card-bar" id="cardBar">
+    <!-- 8 thẻ -->
+    <div class="card" draggable="true" data-img="images/card1.png"><img src="images/card1.png"></div>
+    <div class="card" draggable="true" data-img="images/card2.png"><img src="images/card2.png"></div>
+    <div class="card" draggable="true" data-img="images/card3.png"><img src="images/card3.png"></div>
+    <div class="card" draggable="true" data-img="images/card4.png"><img src="images/card4.png"></div>
+    <div class="card" draggable="true" data-img="images/card5.png"><img src="images/card5.png"></div>
+    <div class="card" draggable="true" data-img="images/card6.png"><img src="images/card6.png"></div>
+    <div class="card" draggable="true" data-img="images/card7.png"><img src="images/card7.png"></div>
+    <div class="card" draggable="true" data-img="images/card8.png"><img src="images/card8.png"></div>
+	<div class="card" draggable="true" data-img="images/card8.png"><img src="images/card9.png"></div>
+</div>
+
+<div class="container">
+    <!-- ===== CASE ===== -->
+    <div class="case-panel">
+        <button class="case-btn" onclick="setCase(4,2)">Case 1: 4×2</button>
+        <button class="case-btn" onclick="setCase(5,2)">Case 2: 5×2</button>
+        <button class="case-btn" onclick="setCase(7,2)">Case 3: 7×2</button>
+        <button class="case-btn" onclick="setCase(8,2)">Case 4: 8×2</button>
+        <button class="case-btn" onclick="setCase(4,3)">Case 5: 4×3</button>
+        <button class="case-btn" onclick="setCase(6,3)">Case 6: 6×3</button>
+        <button class="case-btn" onclick="setCase(8,3)">Case 7: 8×3</button>
+
+        <button class="reset-btn" onclick="resetGrid()">🔄 Reset</button>
+    </div>
+
+    <!-- ===== GRID ===== -->
+    <div class="grid-area">
+        <div id="grid" class="grid"></div>
+    </div>
+</div>
+
+<!-- ===== JAVASCRIPT ===== -->
+<script>
+let draggedImg = null;
+
+document.querySelectorAll(".card").forEach(card => {
+    card.addEventListener("dragstart", e => {
+        draggedImg = card.dataset.img;
+    });
+});
+
+function setCase(cols, rows) {
+    const grid = document.getElementById("grid");
+    grid.innerHTML = "";
+    grid.style.gridTemplateColumns = `repeat(${cols}, 100px)`;
+
+    for (let i = 0; i < cols * rows; i++) {
+        const cell = document.createElement("div");
+        cell.className = "cell";
+
+        cell.addEventListener("dragover", e => e.preventDefault());
+
+        cell.addEventListener("drop", e => {
+            e.preventDefault();
+            cell.innerHTML = "";
+            const img = document.createElement("img");
+            img.src = draggedImg;
+            cell.appendChild(img);
+        });
+
+        grid.appendChild(cell);
+    }
+}
+
+function resetGrid() {
+    document.querySelectorAll(".cell").forEach(cell => {
+        cell.innerHTML = "";
+    });
+}
+</script>
+
+</body>
+</html>
